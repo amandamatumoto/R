@@ -1,0 +1,475 @@
+---
+title: "R Fundamentals"
+author: Amanda Matumoto
+date: August 02, 2021
+output: github_document
+  toc: true
+  toc_depth: 2
+---
+
+# Estudos do Curso de Data Analysis with R Programming da Google, oferecido pela Coursera.
+Parte 1 - 
+As anotações a seguir estarão em inglês.
+
+## Functions
+
+print function
+```{r}
+print("Coding in R")
+```
+
+help function
+```{r}
+?print
+```
+
+## Variables - objects
+
+1 - It can be used for filtering data
+2 - Variable names should start with a letter, it can include numbers and underscore
+3 - Lowercase is best practice
+4 - An assigning operator is "<-"
+5 - The created variables are shown in the global environment
+```{r}
+first_variable <- "This is my variable"
+second_variable <- 12.5
+```
+
+## Data types
+
+Atomic vectors = Logical, Character, Numeric (Integer and Double)
+
+### Logical
+```{r}
+5>4
+```
+
+### Integer
+```{r}
+3
+```
+
+### Double
+```{r}
+ 101.175
+```
+
+### Character
+```{r}
+"Coding"
+```
+
+## Vector 
+
+A group of the SAME type stored in a sequence in R
+
+1 - Creating vectors: c(values you want inside the vector)
+```{r}
+vec_1 <- c(13, 48.5, 71, 101.5, 2)
+vec_1
+```
+
+2 - Determining the properties of the vector
+```{r}
+typeof(vec_1)
+length(vec_1)
+is.atomic(vec_1)
+is.logical(vec_1)
+is.double(vec_1)
+is.integer(vec_1)
+is.character(vec_1)
+```
+
+3 - Naming vectors
+```{r}
+names(vec_1) <- c("a", "b", "c", "d", "e")
+vec_1
+```
+
+## Lists
+
+Lists are different from Vectors because they can store elements from any type
+
+1 - Creating a list
+```{r}
+list_1 <- list("a", 1L, 1.5, TRUE)
+list_1
+
+z <- list(list(list(1, 3, 5)))
+z
+```
+
+2 - Determining the structure of lists
+```{r}
+str(list_1)
+str(z)
+```
+
+3 - Naming lists
+```{r}
+list("Chicago" = 1, "New York" = 2, "Los Angeles" = 3)
+```
+
+## Operators
+
+A symbol that names the type of operation or calculation to be performed in a formula
+
+### 1 - Assignment operators
+
+Used to assign values to variables and vector
+```{r}
+vec_2 <- c(1, 2, 3)
+vec_2
+```
+
+### 2 - Arithmetic operators: +, -, *, /
+```{r}
+quarter_1_sales <- 35657.98
+quarter_2_sales <- 43810.55
+midyear_sales <- quarter_1_sales + quarter_2_sales
+midyear_sales
+```
+```{r}
+yearend_sales <- midyear_sales*2
+yearend_sales
+```
+
+### 3 - Logical operators
+
+Return a logical data type such as TRUE or FALSE
+
+AND: & or &&
+```{r}
+x <- 10
+x > 3 & x < 12
+```
+```{r}
+x <- 20
+x > 3 & x < 12
+```
+
+OR: | or ||
+```{r}
+y <- 7
+y < 8 | y> 16
+```
+```{r}
+y <- 12
+y < 8 | y > 16
+```
+
+NOT: !
+
+Zero is considered FALSE and non-zero numbers are taken as TRUE. The NOT operator evaluates to the opposite logical value.
+
+```{r}
+x <- 2
+!x
+```
+
+### 4 - Conditional Statements
+
+if statement
+
+The if statement sets a condition, and if the condition evaluates to TRUE, the R code associated with the if statement is executed.
+```{r}
+x <- 4
+  
+if (x > 0) {
+  print("x is a positive number")
+  
+}
+```
+
+else statement
+
+The code associated with the else statement gets executed whenever the condition of the if statement is not TRUE.
+```{r}
+
+x <- 7
+if (x > 0) {
+  print("x is as positive number")
+} else {
+  print("x is a negative number or zero")
+}
+```
+
+else if statement
+
+If the if condition (condition1) is met, then R executes the code in the first expression (expr1). If the if condition is not met, and the else if condition (condition2) is met, then R executes the code in the second expression (expr2). If neither of the two conditions are met, R executes the code in the third expression (expr3).
+```{r}
+
+x <- -1
+if (x < 0) {
+    print("x is a negatve number")
+} else if (x == 0) {
+  print("x is zero")
+} else  {
+  print("x is a positive number")
+}
+
+```
+
+
+## Pipes
+
+A tool in R for expressing a sequence of multiple operations, represented with "%>%"
+1 - Add %>% at the end of each line of the pipe operation except the last one
+2 - Check your code after you programmed your pipe
+3 - If the code is not indented, then it is not under the pipe operator
+4 - Go back and check, add codes, have fun 
+
+Nested:
+Describes code that performs a particular function and is contained within code that performs a broader function
+
+Example:
+
+Opening the ToothGrowth dataset:
+```{r}
+data("ToothGrowth")
+View(ToothGrowth)
+install.packages("dplyr")
+library("dplyr")
+```
+
+Filtering the dataset for the selected dose of vitamin C:
+```{r}
+filtered_tg <- filter(ToothGrowth, dose == 0.5)
+filtered_tg
+```
+
+Sorting the dataset:
+```{r}
+arrange(filtered_tg, len)
+```
+Example 2: nested function
+```{r}
+arrange(filter(ToothGrowth, dose == 0.5), len)
+```
+
+Example 3: using pipe %>%  (ctrl+shift+m)
+```{r}
+filtered_toothgrowth <- ToothGrowth %>% 
+  filter(dose == 0.5) %>% 
+  arrange(len)
+filtered_toothgrowth
+```
+
+Adding other variables:
+```{r}
+filtered_toothgrowth <- ToothGrowth %>% 
+  filter(dose == 0.5) %>% 
+  group_by(supp) %>% 
+  summarise(mean_len = mean(len, na.rm = T), .groups = "drop")
+filtered_toothgrowth
+```
+
+
+
+## Dates and times
+
+lubridate helps working with date and time
+```{r}
+install.packages("tidyverse")
+library(tidyverse)
+library(lubridate)
+```
+
+Types
+1 - Date ("2016-08-16")
+2 - Time ("20:11:59 UTC")
+3 - Date-Time ("2016-08-16 20:11:59 UTC")
+4 - UTC, which stands for Universal Time Coordinated
+```{r}
+today()
+now()
+```
+
+When you create date-time using functions, R returns the date in yyyy-mm-dd format
+
+From strings:
+```{r}
+ymd("2021-01-20")
+mdy("January 20th, 2021")
+dmy("20-Jan-2021")
+```
+
+From date-time components:
+```{r}
+ymd_hms("2016-08-16 20:11:59")
+mdy_hm("02-Aug-2021 12:51")
+```
+
+Switching between existing date-time objects:
+```{r}
+as_date(now())
+```
+
+## Data Structures
+
+### Data Frames
+
+A data frame is a collection of columns–similar to a spreadsheet or SQL table. Each column has a name at the top that represents a variable, and includes one observation per row.
+
+Key things to keep in mind when working with Data Frames:
+- Columns should be named
+- Data frames can include many different types of data, like numeric, logical, or character
+- Elements in the same column should be of the same type
+
+Creating a Data Frame:
+```{r}
+data.frame(x = c(1, 2, 3), y = c(1.5, 5.5, 7.5))
+
+```
+
+### Files
+
+1 - Creating a File:
+```{r}
+dir.create("destination_folder")
+
+file.create("new_text_file.txt")
+
+file.create("new_csv_file.csv")
+```
+
+2 - Copying a File:
+```{r}
+file.copy("new_text_file.txt", "destination_folder")
+```
+
+3 - Deleting a File:
+```{r}
+unlink("new_csv_file.csv")
+
+```
+
+### Matrices
+
+It is a two-dimensional collection of data elements. By contrast, a vector is a one-dimensional sequence of data elements, but like vectors, matrices can only contain a single data type.
+
+1 - Creating a matrix:
+```{r}
+matrix(c(3:8), nrow = 2)
+```
+```{r}
+matrix(c(3:8), ncol = 2)
+```
+
+## Viewing data
+
+Diamonds dataset
+
+1 - head function: displays the columns and the first several rows of data
+```{r}
+head(diamonds)
+```
+
+2 - Summaries
+```{r}
+str(diamonds)
+```
+```{r}
+glimpse(diamonds)
+```
+
+3 - List of column names 
+```{r}
+colnames(diamonds)
+
+```
+
+## Cleaning data
+
+1 - Renaming columns or variables
+```{r}
+rename(diamonds, carat_new = carat, cut_new = cut)
+```
+
+2 - Summarize: You can use it to generate a wide range of summary statistics for your data
+```{r}
+summarise(diamonds, mean_carat = mean(carat))
+```
+
+## Visualizing data
+
+1 - ggplot2 is one of the most commonly used visualization packages
+To build a visualization with `ggplot2` you layer plot elements together with a `+` symbol
+```{r}
+ggplot(data = diamonds, aes(x = carat, y = price)) +
+  geom_point()
+```
+
+2 - For example, if you wanted to change the color of each point so that it represented another variable, such as the cut of the diamond, you can change the code like this:
+```{r}
+ggplot(data = diamonds, aes(x = carat, y = price, color = cut)) +
+  geom_point()
+```
+
+3 - Sometimes when you are trying to represent many different aspects of your data in a visual, it can help to separate out some of the components. For example, you could create a different plot for each type of cut.
+```{r}
+ggplot(data = diamonds, aes(x = carat, y = price, color = cut)) +
+  geom_point() +
+  facet_wrap(~cut)
+```
+
+## R packages
+
+Units of reproducible R code:
+- Reusable R functions
+- Documentation about the function
+- Sample dataset
+- Tests for checking your code
+
+Base R: package included in RStudio
+
+Before using packages it is need to load them by using the library function
+- base: installed and loaded
+- recommended: installed but not loaded
+- packages tab: shows details about the packages
+```{r}
+installed.packages()
+```
+
+## Tidyverse
+A system of packages in R with a common design philosophy for data manipulation, exploration, and visualization
+```{r}
+install.packages("tidyverse")
+```
+
+```{r}
+library(tidyverse)
+```
+
+8 core tidyverse packages:
+
+- ggplot2
+  Create a variety of data viz by applying different visual properties to the data variables in R.
+
+- tidyr
+  A package used for data cleaning to make tidy data. Works with wide and long data.
+  
+- readr
+  Reads files.
+
+- dplyr
+  Offers a consistent set of functions that help you complete some common data manipulation tasks.
+  
+- stringr
+- forcats
+- tibble
+- purrr
+
+### Updating packages:
+```{r}
+tidyverse_update()
+```
+
+Installing the package again will also update it
+
+### Read tidyverse vignettes 
+
+A vignette is documentation that acts as a guide to an R package.
+```{r}
+browseVignettes("ggplot2")
+```
